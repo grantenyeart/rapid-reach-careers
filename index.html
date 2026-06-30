@@ -221,8 +221,8 @@
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  // Set after the Make scenario is live:
-  var WEBHOOK_URL = "REPLACE_MAKE_WEBHOOK_URL";
+  // GHL inbound-webhook trigger (RSM subaccount "Recruit Intake" workflow):
+  var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/kztzeRozCVmmUwA0ngT6/webhook-trigger/7608c832-a835-45d1-90b9-3acd74190b5d";
 
   var form = document.getElementById('applyForm');
   var btn = document.getElementById('submitBtn');
@@ -233,10 +233,11 @@
     btn.disabled = true;
     btn.innerHTML = 'Submitting…';
 
-    var data = {};
-    new FormData(form).forEach(function(v,k){ data[k]=v; });
-    data.source = 'careers-page';
-    data.submitted_at = new Date().toISOString();
+    // urlencoded + no-cors = sends cross-origin to GHL without a CORS preflight
+    var params = new URLSearchParams();
+    new FormData(form).forEach(function(v,k){ params.append(k, v); });
+    params.append('source', 'careers-page');
+    params.append('submitted_at', new Date().toISOString());
 
     function done(){
       form.classList.add('hide');
@@ -246,11 +247,8 @@
 
     if(WEBHOOK_URL.indexOf('REPLACE') === 0){ done(); return; }
 
-    fetch(WEBHOOK_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data)
-    }).then(done).catch(done);
+    fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', body: params })
+      .then(done).catch(done);
   });
 </script>
 </body>

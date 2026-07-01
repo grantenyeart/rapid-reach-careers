@@ -117,13 +117,13 @@
   <div class="grid g3">
     <div class="card">
       <div class="num">1</div>
-      <div class="ch">Apply below</div>
-      <div class="cd">Fill out the short application. Takes two minutes. We're looking for coachable, hungry people, not résumés.</div>
+      <div class="ch">Apply + book</div>
+      <div class="cd">Pick a time and answer a few quick questions. Two minutes, and you're on the calendar. We read for hunger, not résumés.</div>
     </div>
     <div class="card">
       <div class="num">2</div>
-      <div class="ch">Book a discovery call</div>
-      <div class="cd">Pick a time to hop on a quick Google Meet with Grant. We talk through your goals and whether it's the right fit, both ways.</div>
+      <div class="ch">Hop on the call</div>
+      <div class="cd">A quick Google Meet with Grant. We talk through your goals and whether it's the right fit, both ways.</div>
     </div>
     <div class="card">
       <div class="num">3</div>
@@ -155,101 +155,22 @@
 
 <section class="wrap" id="apply">
   <div class="kicker">Apply</div>
-  <h2>Start your application.</h2>
-  <p class="lead">Answer honestly. We're reading for hunger and coachability, not perfection.</p>
+  <h2>Apply and book your call.</h2>
+  <p class="lead">Pick a time below and answer a few quick questions. That's the whole application. You'll get a Google Meet invite for your call with Grant.</p>
 
-  <div class="formcard">
-    <form id="applyForm" class="form-live" novalidate>
-      <div class="frow">
-        <div class="field"><label>Full name <span class="req">*</span></label><input name="name" type="text" required autocomplete="name" placeholder="Jordan Smith"></div>
-        <div class="field"><label>Email <span class="req">*</span></label><input name="email" type="email" required autocomplete="email" placeholder="you@email.com"></div>
-      </div>
-      <div class="frow">
-        <div class="field"><label>Phone <span class="req">*</span></label><input name="phone" type="tel" required autocomplete="tel" placeholder="(555) 123-4567"></div>
-        <div class="field"><label>City / time zone <span class="req">*</span></label><input name="location" type="text" required placeholder="Denver, CO (MST)"></div>
-      </div>
-      <div class="frow">
-        <div class="field">
-          <label>Sales experience <span class="req">*</span></label>
-          <select name="experience" required>
-            <option value="" disabled selected>Select one</option>
-            <option>None (total beginner)</option>
-            <option>Some (under 1 year)</option>
-            <option>Experienced (1+ years)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Hours/week you can commit <span class="req">*</span></label>
-          <select name="hours" required>
-            <option value="" disabled selected>Select one</option>
-            <option>Under 10 hrs</option>
-            <option>10-20 hrs</option>
-            <option>20-40 hrs</option>
-            <option>40+ hrs (full-time)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>How soon can you hop on a discovery call? <span class="req">*</span></label>
-        <select name="commit" required>
-          <option value="" disabled selected>Select one</option>
-          <option>Today or tomorrow</option>
-          <option>This week</option>
-          <option>Next week</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Why do you want a remote sales role? <span class="req">*</span></label>
-        <textarea name="why" required placeholder="Tell us what's driving you..."></textarea>
-      </div>
-      <button type="submit" class="btn full" id="submitBtn">Submit application <span aria-hidden="true">→</span></button>
-      <p class="hint">By applying you agree to be contacted about the role.</p>
-    </form>
-
-    <div class="success" id="success">
-      <div class="ring">✓</div>
-      <h2 style="font-size:26px;">Application received.</h2>
-      <p class="lead" style="margin:14px auto 0;">Last step: book your discovery call with Grant. Pick a time below and you'll get a Google Meet invite. This call is how you lock in your spot, so don't skip it.</p>
-      <a href="https://links.rapidreachads.com/widget/booking/FlHLonjdl7R0SGRE51S4" class="btn" id="bookBtn" target="_blank" rel="noopener">Book your discovery call <span aria-hidden="true">→</span></a>
-      <p class="hint">Pick a time that works and we'll see you on Google Meet.</p>
-    </div>
+  <div style="background:#ffffff;border-radius:20px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.45);margin-top:30px;overflow:hidden;">
+    <iframe src="https://links.rapidreachads.com/widget/booking/FlHLonjdl7R0SGRE51S4"
+            style="width:100%;border:none;overflow:hidden;min-height:730px;display:block;" scrolling="no"
+            id="ghl_booking" title="Book your discovery call"></iframe>
   </div>
+  <p class="hint">Not loading? <a href="https://links.rapidreachads.com/widget/booking/FlHLonjdl7R0SGRE51S4" target="_blank" rel="noopener" style="color:var(--gold);">Open the booking page in a new tab.</a></p>
 </section>
 
 <div class="footer">© <span id="yr"></span> Rapid Reach · Remote Sales Mastery</div>
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
-
-  // GHL inbound-webhook trigger (RSM subaccount "Recruit Intake" workflow):
-  var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/kztzeRozCVmmUwA0ngT6/webhook-trigger/7608c832-a835-45d1-90b9-3acd74190b5d";
-
-  var form = document.getElementById('applyForm');
-  var btn = document.getElementById('submitBtn');
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    if(!form.checkValidity()){ form.reportValidity(); return; }
-    btn.disabled = true;
-    btn.innerHTML = 'Submitting…';
-
-    // urlencoded + no-cors = sends cross-origin to GHL without a CORS preflight
-    var params = new URLSearchParams();
-    new FormData(form).forEach(function(v,k){ params.append(k, v); });
-    params.append('source', 'careers-page');
-    params.append('submitted_at', new Date().toISOString());
-
-    function done(){
-      form.classList.add('hide');
-      document.getElementById('success').classList.add('show');
-      document.getElementById('success').scrollIntoView({behavior:'smooth', block:'center'});
-    }
-
-    if(WEBHOOK_URL.indexOf('REPLACE') === 0){ done(); return; }
-
-    fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', body: params })
-      .then(done).catch(done);
-  });
 </script>
+<script src="https://links.rapidreachads.com/js/form_embed.js" type="text/javascript"></script>
 </body>
 </html>
